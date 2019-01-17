@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .btn {
+            width: 250px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #2196f3;
+            cursor: pointer;
+        }
+
+        [data-button=btn-click] {
+            position: relative;
+            overflow: hidden;
+        }
+
+        [data-button=btn-click] .radius {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            z-index: 888;
+            background: #ccc;
+            animation: list .6s linear;
+        }
+
+        @keyframes list {
+            0% {
+                width: 5px;
+                height: 5px;
+                opacity: 0.5;
+            }
+
+            100% {
+                opacity: 0.1;
+                transform: scale(8);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div data-button="btn-click" class="btn">div</div>
+</body>
+
+
+<script>
+    btns('[data-button="btn-click"]',5,500);
+    function btns(btn,num,time) {
+        if(!btn){
+            console.log('请输入id或class或tag');
+            return false;
+        };
+        num = num || 5;
+        time = time || 500;
+        var btn = document.querySelectorAll(btn);
+        for (var i = 0; i < btn.length; i++) {
+            click_btn(i);
+        };
+        function click_btn(i) {
+            btn[i].addEventListener('click', function (e) {
+                var x = this.getBoundingClientRect().left;
+                var y = this.getBoundingClientRect().top;
+                var w = Math.max(this.offsetHeight, this.offsetWidth);
+                var r = document.createElement('span');
+                r.className = 'radius';
+                var top = e.clientY - (num / 2) - y;
+                var left = e.clientX - (num / 2) - x;
+                r.style = 'top:' + top + 'px;left:' + left + 'px;width:' + w + 'px;height:' + w +
+                    'px;';
+                this.appendChild(r);
+                setTimeout(function () {
+                    btn[i].removeChild(r);
+                }, time);
+            }, false);
+        };
+    };
+</script>
+
+</html>
